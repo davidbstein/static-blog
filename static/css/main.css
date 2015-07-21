@@ -59,7 +59,7 @@ body {
     font-size: 16px;
     font-family: "open sans", sans-serif;
     line-height: 24px;
-    color: #555;
+    color: #F9F9F9;
     background-color: #F9F9F9;
 }
 
@@ -77,13 +77,6 @@ header ul {
     min-width: 300px;
     justify-content: flex-start;
     padding-left: 32px;
-}
-
-div#content-wrapper {
-    min-height: 100vh;
-    background: white;
-    box-shadow: 0 0 2px 1px rgb(199, 199, 199);
-    padding: 64px 32px;
 }
 
 header ul li {
@@ -105,13 +98,6 @@ header a:hover {
     color: #666;
 }
 
-.wrapper {
-    max-width: 1024px;
-    margin: 0 auto;
-    position: relative;
-}
-
-
 div#header-background {
     position: absolute;
     width: 1024px;
@@ -127,4 +113,18 @@ div#header-content {
     flex-wrap: wrap;
     margin: 0 auto;
     height: 100%;
+}
+
+div#content-wrapper {
+    min-height: 100vh;
+    background: white;
+    box-shadow: 0 0 2px 1px rgb(199, 199, 199);
+    padding: 64px 32px;
+}
+
+.wrapper {
+    color: #555;
+    max-width: 1024px;
+    margin: 0 auto;
+    position: relative;
 }
