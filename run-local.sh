@@ -6,12 +6,15 @@ PYTHON_PID=$!
 cd ..
 
 start_it () {
-    echo "- copying static content"
+    echo "- building directory structure"
     cd content
     find * -type d -exec mkdir ../compiled-site/\{\} \;
     cd ..
-    cp -r external compiled-site/external
-    cp -r static compiled-site/static
+    echo "- copying static content"
+    rm -rf compiled-site/external
+    cp -rf external compiled-site/external
+    rm -rf compiled-site/static
+    cp -rf static compiled-site/static
 
     echo "- compiling templates"
     for f in $(find content -type f); do

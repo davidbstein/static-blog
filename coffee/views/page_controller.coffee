@@ -2,6 +2,7 @@ dependencies =
   React: "react"
   cx: 'cx'
   $: "jquery"
+  CommonmarkElement: "external/commonmark-react/commonmark_react"
 
 # copy/pastable require.js hacks
 define (_v for _, _v of dependencies), () ->
@@ -39,7 +40,7 @@ define (_v for _, _v of dependencies), () ->
             d.li {}, d.a href: "/blog", "blog"
             d.li {}, d.a href: "/projects", "projects"
             d.li {}, d.a href: "/about", "about"
-            d.li {}, d.a href: "/contact", "contact"
+            d.li {}, d.a href: "/about/contact.html", "contact"
 
   Content = React.createFactory React.createClass
     displayName: "ContentView"
@@ -47,7 +48,8 @@ define (_v for _, _v of dependencies), () ->
     render: ->
       d.div
         id: 'content-wrapper'
-        "#{@props.content}"
+        CommonmarkElement
+          raw: "#{@props.content}"
 
   Footer = React.createFactory React.createClass
     displayName: "FooterView"
