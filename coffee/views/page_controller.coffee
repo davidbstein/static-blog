@@ -3,6 +3,7 @@ dependencies =
   cx: 'cx'
   $: "jquery"
   CommonmarkElement: "external/commonmark-react/commonmark_react"
+  hljs_shim: "highlight"
 
 # copy/pastable require.js hacks
 define (_v for _, _v of dependencies), () ->
@@ -37,10 +38,8 @@ define (_v for _, _v of dependencies), () ->
             className: "title"
             d.a href: "/", "stein"
           d.ul {},
-            d.li {}, d.a href: "/blog", "blog"
-            d.li {}, d.a href: "/projects", "projects"
-            d.li {}, d.a href: "/about", "about"
-            d.li {}, d.a href: "/about/contact.html", "contact"
+            d.li {}, d.a href: "/blog/index.html", "blog"
+            d.li {}, d.a href: "/about/index.html", "about"
 
   Content = React.createFactory React.createClass
     displayName: "ContentView"
@@ -48,8 +47,13 @@ define (_v for _, _v of dependencies), () ->
     render: ->
       d.div
         id: 'content-wrapper'
-        CommonmarkElement
-          raw: "#{@props.content}"
+        d.div
+          id: 'content-wrapper-bg'
+        d.div
+          id: 'content-wrapper-fg'
+          CommonmarkElement
+            raw: "#{@props.content}"
+            showTableOfContents: window.showTableOfContents
 
   Footer = React.createFactory React.createClass
     displayName: "FooterView"
@@ -57,6 +61,7 @@ define (_v for _, _v of dependencies), () ->
     render: ->
       d.div
         id: 'footer-wrapper'
+        "Copyright (c) David Stein"
 
   PageController = React.createClass
     displayName: "PageController"
@@ -64,10 +69,34 @@ define (_v for _, _v of dependencies), () ->
     propTypes:
       content: React.PropTypes.string
 
-    getInitialState: -> {}
+    getInitialState: ->
+      updated_content: null
+
+    updateContent: ->
+      if location.pathname.endsWith "html"
+        filename = location.pathname.match(/(.*?)\.html$/)[1]
+        path = "/raw#{filename}.md"
+      else
+        path = "/raw#{location.pathname}index.md"
+      $.get path, (data) =>
+        if data != @state.updated_content
+          @setState updated_content: data
+
+    componentDidMount: ->
+      if location.host.startsWith "127.0.0.1"
+        setInterval(@updateContent, 1000)
+      do @highlight_code
+
+    componentDidUpdate: ->
+      do @highlight_code
+
+    highlight_code: ->
+      $("code").each (i, element) =>
+        hljs.highlightBlock element
 
     render: ->
       d.div className: "wrapper",
         Header {}
-        Content content: @props.content
+        Content
+          content: @state.updated_content ? @props.content
         Footer {}

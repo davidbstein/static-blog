@@ -15,8 +15,7 @@ start_it () {
     cp -rf external compiled-site/external
     rm -rf compiled-site/static
     cp -rf static compiled-site/static
-    cp -rf content compiled-site/raw
- 
+
     echo "- compiling templates"
     for f in $(find content -type f); do
         python build_content.py $f
@@ -24,7 +23,7 @@ start_it () {
 
     echo "- compiling coffee"
     # -w to turn on watching
-    coffee -m -o compiled-site/compiled-coffee -c coffee
+    coffee -o compiled-site/compiled-coffee -c coffee
 }
 
 
@@ -39,8 +38,8 @@ trap 'int_handler' INT
 while true; do
     new=$(
         find "." -not \( -type d -name ".?*" -prune \) -not -path "./compiled-site*" -print0 2>/dev/null |
-        xargs -0 stat -f "%m %z %N" |
-        md5)
+        xargs -0 stat --format="%m %z %N" |
+        md5sum)
     if [ "$new" != "$old" ]; then
         old=$new;
         start_it || echo "err!";
